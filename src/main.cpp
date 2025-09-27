@@ -10,9 +10,9 @@ int main() {
         window.makeContextCurrent();
 
         window.setColor(kerionGL::Color::Blue());
+        window.clear();
 
         while (!window.shouldClose()) {
-            window.clear();
             // Render here (if needed)
 
             window.swapBuffers();
