@@ -22,7 +22,7 @@ jobs:
       - name: Set up CMake
         uses: jwlawson/actions-setup-cmake@v2
 
-      # Dependencies
+      # Deps
       - name: Install deps (Ubuntu)
         if: runner.os == 'Linux'
         run: |
@@ -37,13 +37,14 @@ jobs:
 
       - name: Setup vcpkg (Windows)
         if: runner.os == 'Windows'
-        uses: microsoft/setup-vcpkg@v1
+        uses: actions/setup-vcpkg@v1
         with:
-          vcpkg-triplet: x64-windows
+          vcpkg-version: latest
+          cache: true
 
       - name: Install deps (Windows via vcpkg)
         if: runner.os == 'Windows'
-        run: vcpkg install glfw3
+        run: vcpkg install glfw3:x64-windows
 
       # Configure
       - name: Configure (Linux/macOS)
@@ -53,8 +54,7 @@ jobs:
       - name: Configure (Windows)
         if: runner.os == 'Windows'
         run: >
-          cmake -S . -B build
-          -A x64
+          cmake -S . -B build -A x64
           -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake
 
       # Build
