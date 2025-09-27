@@ -3,6 +3,6 @@
 
 int main() {
     const auto version = kerionGL::getVersion();
-    assert(version == "0.1.0");
+    assert(version == "0.1.1");
     return 0;
 }

@@ -1,26 +1,39 @@
 #include "keriongl/window.h"
 #include <stdexcept>
+#include <atomic>
 
 namespace kerionGL {
+    // Static member definitions
+    std::atomic<bool> Window::glfwInitialized{false};
+    std::atomic<int> Window::windowCount{0};
 
     Window::Window(int width, int height, const std::string& title)
         : width(width), height(height), title(title) {
-        if (!glfwInit()) {
-            throw std::runtime_error("Failed to initialize GLFW");
+        if (width <= 0 || height <= 0) {
+            throw std::invalid_argument("Width and height must be positive integers");
         }
-
+        bool expected = false;
+        if (glfwInitialized.compare_exchange_strong(expected, true)) {
+            if (!glfwInit()) {
+                glfwInitialized = false;
+                throw std::runtime_error("Failed to initialize GLFW");
+            }
+        }
         window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
         if (!window) {
-            glfwTerminate();
             throw std::runtime_error("Failed to create GLFW window");
         }
+        ++windowCount;
     }
 
     Window::~Window() {
         if (window) {
             glfwDestroyWindow(window);
+            if (--windowCount == 0 && glfwInitialized) {
+                glfwTerminate();
+                glfwInitialized = false;
+            }
         }
-        glfwTerminate();
     }
 
     void Window::makeContextCurrent() {
