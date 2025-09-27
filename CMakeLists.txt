@@ -13,5 +13,5 @@ target_include_directories(KerionGL_lib PUBLIC include vendor/glfw/include)
 target_link_libraries(KerionGL_lib PUBLIC glfw)
 target_link_libraries(KerionGL_lib PUBLIC GL)
 
-add_executable(KerionGL src/main.cpp src/rectangle.cpp)
+add_executable(KerionGL src/main.cpp src/rectangle.cpp src/triangle.cpp)
 target_link_libraries(KerionGL PRIVATE KerionGL_lib)
