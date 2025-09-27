@@ -2,6 +2,7 @@
 #include "keriongl/version.h"
 #include "keriongl/window.h"
 #include "keriongl/rectangle.h"
+#include "keriongl/triangle.h"
 
 int main() {
     std::cout << "KerionGL Version: " << kerionGL::getVersion() << std::endl;
@@ -12,7 +13,8 @@ int main() {
 
         window.setColor(kerionGL::Color::White());
         window.addShape(std::make_shared<kerionGL::Rectangle>(
-            100, 100, 200, 150, kerionGL::Color::Green()));
+            100, 100, 200, 150, kerionGL::Color::Blue()));
+        window.addShape(std::make_shared<kerionGL::Triangle>(100, 300, 300, 300, 200, 450, kerionGL::Color::Green()));
 
         while (!window.shouldClose()) {
             window.clear();
