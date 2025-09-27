@@ -1,6 +1,13 @@
 #include "keriongl/triangle.h"
 
-#include <GL/gl.h>
+#if defined(_WIN32)
+  #include <windows.h>
+  #include <GL/gl.h>
+#elif defined(__APPLE__)
+  #include <OpenGL/gl.h>
+#else
+  #include <GL/gl.h>
+#endif
 
 kerionGL::Triangle::Triangle(float x1, float y1, float x2, float y2, float x3, float y3, const Color& color)
     : m_vertex1X(x1), m_vertex1Y(y1), m_vertex2X(x2), m_vertex2Y(y2), m_vertex3X(x3), m_vertex3Y(y3), m_color(color) {}

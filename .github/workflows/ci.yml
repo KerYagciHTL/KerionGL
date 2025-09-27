@@ -1,16 +1,19 @@
 name: CI
+
 on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build-and-test:
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         build_type: [Release]
+    runs-on: ${{ matrix.os }}
     env:
       GLFW_TAG: 3.3-stable
 
@@ -37,11 +40,21 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install glfw
 
-      - name: Configure
+      - name: Configure (all)
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
-      - name: Build
+      - name: Build (Linux/macOS)
+        if: runner.os != 'Windows'
         run: cmake --build build --config ${{ matrix.build_type }} -- -j
 
-      - name: Test
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: cmake --build build --config ${{ matrix.build_type }} -- /m
+
+      - name: Test (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
         run: ctest --test-dir build -C ${{ matrix.build_type }} --output-on-failure
