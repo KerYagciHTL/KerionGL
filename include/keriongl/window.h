@@ -21,6 +21,8 @@ namespace kerionGL {
         [[nodiscard]] std::string getTitle() const;
         void clear();
 
+        void setColor(const Color &newColor);
+
     private:
         GLFWwindow* window = nullptr;
         int width;

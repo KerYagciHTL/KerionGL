@@ -9,6 +9,8 @@ int main() {
         kerionGL::Window window(800, 600, "KerionGL " + kerionGL::getVersion());
         window.makeContextCurrent();
 
+        window.setColor(kerionGL::Color::Blue());
+
         while (!window.shouldClose()) {
             window.clear();
             // Render here (if needed)

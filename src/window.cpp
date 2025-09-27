@@ -73,8 +73,13 @@ namespace kerionGL {
 
     void Window::clear() {
         makeContextCurrent();
-        glClearColor(color.r, color.g, color.b, color.a);
         glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void Window::setColor(const Color& newColor) {
+        color = newColor;
+        makeContextCurrent();
+        glClearColor(color.r, color.g, color.b, color.a);
     }
 
 } // namespace kerionGL
