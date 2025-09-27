@@ -10,7 +10,8 @@ int main() {
         window.makeContextCurrent();
 
         while (!window.shouldClose()) {
-            // rendering
+            window.clear();
+            // Render here (if needed)
 
             window.swapBuffers();
             window.pollEvents();

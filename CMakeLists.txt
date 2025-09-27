@@ -11,6 +11,7 @@ add_subdirectory(vendor/glfw)
 add_library(KerionGL_lib STATIC src/window.cpp)
 target_include_directories(KerionGL_lib PUBLIC include vendor/glfw/include)
 target_link_libraries(KerionGL_lib PUBLIC glfw)
+target_link_libraries(KerionGL_lib PUBLIC GL)
 
 add_executable(KerionGL src/main.cpp)
 target_link_libraries(KerionGL PRIVATE KerionGL_lib)
