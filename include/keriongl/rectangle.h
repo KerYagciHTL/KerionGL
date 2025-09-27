@@ -10,8 +10,8 @@ namespace kerionGL {
         Rectangle(float x, float y, float width, float height, const Color& color);
         void draw() const override;
     private:
-        float x, y, width, height;
-        Color color;
+        float m_vertex1X, m_vertex1Y, m_width, m_height;
+        Color m_color;
     };
 }
 

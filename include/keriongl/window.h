@@ -33,16 +33,16 @@ namespace kerionGL {
         void drawShapes() const;
 
     private:
-        GLFWwindow* window = nullptr;
-        int width;
-        int height;
-        std::string title;
-        Color color;
+        GLFWwindow* m_window = nullptr;
+        int m_width;
+        int m_height;
+        std::string m_title;
+        Color m_color;
 
-        std::vector<std::shared_ptr<Shape>> shapes;
+        std::vector<std::shared_ptr<Shape>> m_shapes;
 
-        static std::atomic<bool> glfwInitialized;
-        static std::atomic<int> windowCount;
+        static std::atomic<bool> m_glfwInitialized;
+        static std::atomic<int> m_windowCount;
     };
 
 } // namespace kerionGL

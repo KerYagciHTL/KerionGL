@@ -11,7 +11,7 @@ namespace kerionGL {
         void draw() const override;
     private:
         float m_vertex1X, m_vertex1Y, m_vertex2X, m_vertex2Y, m_vertex3X, m_vertex3Y;
-        Color color;
+        Color m_color;
     };
 }
 

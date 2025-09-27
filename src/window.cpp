@@ -5,19 +5,19 @@
 
 namespace kerionGL {
 
-std::atomic<bool> Window::glfwInitialized{false};
-std::atomic<int>  Window::windowCount{0};
+std::atomic<bool> Window::m_glfwInitialized{false};
+std::atomic<int>  Window::m_windowCount{0};
 
 Window::Window(int width, int height, const std::string& title, const Color& color)
-    : width(width), height(height), title(title), color(color) {
+    : m_width(width), m_height(height), m_title(title), m_color(color) {
     if (width <= 0 || height <= 0) {
         throw std::invalid_argument("Width and height must be positive integers");
     }
 
     bool expected = false;
-    if (glfwInitialized.compare_exchange_strong(expected, true)) {
+    if (m_glfwInitialized.compare_exchange_strong(expected, true)) {
         if (!glfwInit()) {
-            glfwInitialized = false;
+            m_glfwInitialized = false;
             throw std::runtime_error("Failed to initialize GLFW");
         }
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -25,19 +25,19 @@ Window::Window(int width, int height, const std::string& title, const Color& col
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
     }
 
-    window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    if (!window) {
+    m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    if (!m_window) {
         throw std::runtime_error("Failed to create GLFW window");
     }
 
-    ++windowCount;
+    ++m_windowCount;
     makeContextCurrent();
     glfwSwapInterval(1);
 
     int fbw, fbh;
-    glfwGetFramebufferSize(window, &fbw, &fbh);
+    glfwGetFramebufferSize(m_window, &fbw, &fbh);
     glViewport(0, 0, fbw, fbh);
-    glfwSetFramebufferSizeCallback(window,
+    glfwSetFramebufferSizeCallback(m_window,
         [](GLFWwindow*, int w, int h){ glViewport(0, 0, w, h); });
 
     // 2D-Orthoprojektion: Pixelkoordinaten, Ursprung links-oben
@@ -52,32 +52,32 @@ Window::Window(int width, int height, const std::string& title, const Color& col
 }
 
 Window::~Window() {
-    if (window) {
-        glfwDestroyWindow(window);
-        if (--windowCount == 0 && glfwInitialized) {
+    if (m_window) {
+        glfwDestroyWindow(m_window);
+        if (--m_windowCount == 0 && m_glfwInitialized) {
             glfwTerminate();
-            glfwInitialized = false;
+            m_glfwInitialized = false;
         }
     }
 }
 
 void Window::makeContextCurrent() {
-    if (window) glfwMakeContextCurrent(window);
+    if (m_window) glfwMakeContextCurrent(m_window);
 }
 
 void Window::swapBuffers() {
-    if (window) glfwSwapBuffers(window);
+    if (m_window) glfwSwapBuffers(m_window);
 }
 
 bool Window::shouldClose() {
-    return window ? glfwWindowShouldClose(window) : true;
+    return m_window ? glfwWindowShouldClose(m_window) : true;
 }
 
 void Window::pollEvents() { glfwPollEvents(); }
 
-int  Window::getWidth()  const { return width; }
-int  Window::getHeight() const { return height; }
-std::string Window::getTitle() const { return title; }
+int  Window::getWidth()  const { return m_width; }
+int  Window::getHeight() const { return m_height; }
+std::string Window::getTitle() const { return m_title; }
 
 void Window::clear() {
     makeContextCurrent();
@@ -86,17 +86,17 @@ void Window::clear() {
 }
 
 void Window::setColor(const Color& newColor) {
-    color = newColor;
+    m_color = newColor;
     makeContextCurrent();
-    glClearColor(color.r, color.g, color.b, color.a);
+    glClearColor(m_color.r, m_color.g, m_color.b, m_color.a);
 }
 
 void Window::addShape(std::shared_ptr<Shape> shape) {
-    shapes.push_back(shape);
+    m_shapes.push_back(shape);
 }
 
 void Window::drawShapes() const {
-    for (const auto& s : shapes) s->draw();
+    for (const auto& s : m_shapes) s->draw();
 }
 
 } //

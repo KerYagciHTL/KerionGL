@@ -3,15 +3,15 @@
 
 namespace kerionGL {
     Rectangle::Rectangle(float x, float y, float width, float height, const Color& color)
-        : x(x), y(y), width(width), height(height), color(color) {}
+        : m_vertex1X(x), m_vertex1Y(y), m_width(width), m_height(height), m_color(color) {}
 
     void Rectangle::draw() const {
-        glColor4f(color.r, color.g, color.b, color.a);
+        glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
         glBegin(GL_QUADS);
-        glVertex2f(x, y);
-        glVertex2f(x + width, y);
-        glVertex2f(x + width, y + height);
-        glVertex2f(x, y + height);
+        glVertex2f(m_vertex1X, m_vertex1Y);
+        glVertex2f(m_vertex1X + m_width, m_vertex1Y);
+        glVertex2f(m_vertex1X + m_width, m_vertex1Y + m_height);
+        glVertex2f(m_vertex1X, m_vertex1Y + m_height);
         glEnd();
     }
 }
