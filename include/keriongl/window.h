@@ -24,7 +24,7 @@ namespace kerionGL {
         int width;
         int height;
         std::string title;
-        // Thread-safe singleton pattern for GLFW
+        //Thread-safe singelton pattern for GLFW initialization
         static std::atomic<bool> glfwInitialized;
         static std::atomic<int> windowCount;
     };
