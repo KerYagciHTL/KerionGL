@@ -1,8 +1,15 @@
-#!/bin/bash
-set -e
-GLFW_TAG="${GLFW_TAG:-3.3-stable}"
-if [ -d "glfw" ]; then
-  echo "glfw directory already exists, skipping clone."
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${GLFW_TAG:=3.3-stable}"
+
+cd "$(dirname "$0")"
+
+if [[ -d glfw/.git ]]; then
+  echo "[prepare] glfw already present -> skip clone"
   exit 0
 fi
-git clone --depth 1 --branch "$GLFW_TAG" https://github.com/glfw/glfw.git glfw
+
+echo "[prepare] cloning GLFW tag '${GLFW_TAG}'"
+git clone --depth 1 --branch "${GLFW_TAG}" https://github.com/glfw/glfw.git glfw
+echo "[prepare] done"
