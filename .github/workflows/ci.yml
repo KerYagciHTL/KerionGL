@@ -22,29 +22,13 @@ jobs:
       - name: Set up CMake
         uses: jwlawson/actions-setup-cmake@v2
 
-      # Deps
       - name: Install deps (Ubuntu)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libglfw3-dev libgl1-mesa-dev xorg-dev
-
-      - name: Install deps (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew install glfw
-
-      - name: Setup vcpkg (Windows)
-        if: runner.os == 'Windows'
-        uses: actions/setup-vcpkg@v1
-        with:
-          vcpkg-version: latest
-          cache: true
-
-      - name: Install deps (Windows via vcpkg)
-        if: runner.os == 'Windows'
-        run: vcpkg install glfw3:x64-windows
+          sudo apt-get install -y \
+            xorg-dev libx11-dev libxrandr-dev libxinerama-dev \
+            libxcursor-dev libxi-dev libgl1-mesa-dev
 
       # Configure
       - name: Configure (Linux/macOS)
@@ -53,9 +37,7 @@ jobs:
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
-        run: >
-          cmake -S . -B build -A x64
-          -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake
+        run: cmake -S . -B build -A x64
 
       # Build
       - name: Build (Linux/macOS)
