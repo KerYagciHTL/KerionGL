@@ -4,7 +4,7 @@
 
 namespace kerionGL{
     inline std::string getVersion() {
-        return "0.1.3";
+        return "0.2.3";
     }
 }
 #endif //KERIONGL_VERSION_H

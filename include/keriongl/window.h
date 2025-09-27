@@ -2,26 +2,35 @@
 #define KERIONGL_WINDOW_H
 
 #include <string>
-#include <GLFW/glfw3.h>
+#include <vector>
+#include <memory>
 #include <atomic>
+#include <GLFW/glfw3.h>
 #include "keriongl/color.h"
+#include "keriongl/shape.h"
 
 namespace kerionGL {
+
     class Window {
     public:
-        Window(int width, int height, const std::string& title, const Color& color = Color::White());
+        Window(int width, int height, const std::string& title,
+               const Color& color = Color::Black());
         ~Window();
 
         void makeContextCurrent();
         void swapBuffers();
         bool shouldClose();
         void pollEvents();
+
         int getWidth() const;
         int getHeight() const;
-        [[nodiscard]] std::string getTitle() const;
-        void clear();
+        std::string getTitle() const;
 
-        void setColor(const Color &newColor);
+        void clear();
+        void setColor(const Color& newColor);
+
+        void addShape(std::shared_ptr<Shape> shape);
+        void drawShapes() const;
 
     private:
         GLFWwindow* window = nullptr;
@@ -29,9 +38,13 @@ namespace kerionGL {
         int height;
         std::string title;
         Color color;
-        //Thread-safe singleton pattern for GLFW initialization
+
+        std::vector<std::shared_ptr<Shape>> shapes;
+
         static std::atomic<bool> glfwInitialized;
         static std::atomic<int> windowCount;
     };
-}
-#endif //KERIONGL_WINDOW_H
+
+} // namespace kerionGL
+
+#endif // KERIONGL_WINDOW_H
