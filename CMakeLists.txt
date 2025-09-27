@@ -8,10 +8,9 @@ enable_testing()
 add_subdirectory(tests)
 add_subdirectory(vendor/glfw)
 
-add_executable(KerionGL src/main.cpp
-        src/window.cpp)
+add_library(KerionGL_lib STATIC src/window.cpp)
+target_include_directories(KerionGL_lib PUBLIC include vendor/glfw/include)
+target_link_libraries(KerionGL_lib PUBLIC glfw)
 
-target_include_directories(KerionGL PRIVATE include)
-target_include_directories(KerionGL PRIVATE vendor/glfw/include)
-
-target_link_libraries(KerionGL PRIVATE glfw)
+add_executable(KerionGL src/main.cpp)
+target_link_libraries(KerionGL PRIVATE KerionGL_lib)
