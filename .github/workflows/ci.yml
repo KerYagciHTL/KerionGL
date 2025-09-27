@@ -19,6 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare vendor libs
+        run: bash vendor/prepare.sh
+
       - name: Set up CMake
         uses: jwlawson/actions-setup-cmake@v2
 
@@ -30,29 +33,15 @@ jobs:
             xorg-dev libx11-dev libxrandr-dev libxinerama-dev \
             libxcursor-dev libxi-dev libgl1-mesa-dev
 
-      # Configure
-      - name: Configure (Linux/macOS)
-        if: runner.os != 'Windows'
+      - name: Install deps (macOS)
+        if: runner.os == 'macOS'
+        run: brew install glfw
+
+      - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
-      - name: Configure (Windows)
-        if: runner.os == 'Windows'
-        run: cmake -S . -B build -A x64
-
-      # Build
-      - name: Build (Linux/macOS)
-        if: runner.os != 'Windows'
+      - name: Build
         run: cmake --build build --config ${{ matrix.build_type }} -- -j
 
-      - name: Build (Windows)
-        if: runner.os == 'Windows'
-        run: cmake --build build --config ${{ matrix.build_type }}
-
-      # Test
-      - name: Test (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: ctest --test-dir build --output-on-failure
-
-      - name: Test (Windows)
-        if: runner.os == 'Windows'
+      - name: Test
         run: ctest --test-dir build -C ${{ matrix.build_type }} --output-on-failure
